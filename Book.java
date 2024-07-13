@@ -2,52 +2,52 @@ import java.util.*;
 
 public class Book {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        Scanner scan = new Scanner(System.in);
         Map<String, Set<String>> Book = new HashMap<>();
 
         System.out.println(
-                "Введите данные для заполнения телефонной книги (формат: Имя Телефон), для просмотра данных введите '1', для удаления данных введите '2', для завершения введите '3':");
+                "Для добавления данных введите имя и номер телефона через пробел\nДля просмотра данных введите 2\nДля удаления данных введите 3\nДля выхода введите 4");
 
         while (true) {
-            String input = scanner.nextLine();
-            if (input.equals("3")) {
+            String input = scan.nextLine();
+            if (input.equals("4")) {
                 break;
-            } else if (input.equals("1")) {
+            } else if (input.equals("2")) {
                 for (Map.Entry<String, Set<String>> entry : Book.entrySet()) {
                     System.out.println(entry.getKey() + ": " + entry.getValue());
                 }
-            } else if (input.equals("2")) {
-                System.out.println("Введите имя, для которого хотите удалить данные:");
-                String nameToDelete = scanner.nextLine();
-                Book.remove(nameToDelete);
-                System.out.println("Данные для имени " + nameToDelete + " удалены.");
+            } else if (input.equals("3")) {
+                System.out.println("Введите имя, данные которого нужно удалить:");
+                String NameDelete = scan.nextLine();
+                Book.remove(NameDelete);
+                System.out.println("Данные удалены.");
             } else {
-                String[] parts = input.split(" ");
-                if (parts.length != 2) {
-                    System.out.println("Некорректный формат данных. Повторите ввод.");
+                String[] DataBook = input.split(" ");
+                if (DataBook.length != 2) {
+                    System.out.println("Данные введены некорректно. \nПовторите ввод через пробел.");
                     continue;
                 }
 
-                String name = parts[0];
-                String phone = parts[1];
+                String Name = DataBook[0];
+                String Phone = DataBook[1];
 
-                Book.computeIfAbsent(name, k -> new HashSet<>()).add(phone);
+                Book.computeIfAbsent(Name, k -> new HashSet<>()).add(Phone);
+
             }
         }
-
-        Map<String, Set<String>> consolidatedPhoneBook = new HashMap<>();
+        Map<String, Set<String>> consolPhoneBook = new HashMap<>();
         for (Map.Entry<String, Set<String>> entry : Book.entrySet()) {
-            String name = entry.getKey();
+            String Name = entry.getKey();
             Set<String> phones = entry.getValue();
-            consolidatedPhoneBook.computeIfAbsent(name, k -> new HashSet<>()).addAll(phones);
+            consolPhoneBook.computeIfAbsent(Name, k -> new HashSet<>()).addAll(phones);
         }
 
-        List<Map.Entry<String, Set<String>>> sortedEntries = new ArrayList<>(consolidatedPhoneBook.entrySet());
-        sortedEntries.sort((e1, e2) -> Integer.compare(e2.getValue().size(), e1.getValue().size()));
+        List<Map.Entry<String, Set<String>>> Sorting = new ArrayList<>(consolPhoneBook.entrySet());
+        Sorting.sort((e1, e2) -> Integer.compare(e2.getValue().size(), e1.getValue().size()));
 
-        for (Map.Entry<String, Set<String>> entry : sortedEntries) {
+        for (Map.Entry<String, Set<String>> entry : Sorting) {
             System.out.println(entry.getKey() + ": " + entry.getValue());
         }
-        scanner.close();
+        scan.close();
     }
 }
